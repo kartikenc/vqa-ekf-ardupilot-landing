@@ -39,8 +39,8 @@ Holybro X500 V2 · Cube Orange+ with ArduCopter 4.6.3 (EKF3) · Raspberry Pi 5 �
 
 | Path | Content |
 |---|---|
-| `flight_code/vqa_ekf_ab_test_v7.2.py` | Companion-computer script flown in **E1** (optical flow on) |
-| `flight_code/vqa_ekf_e3_V1.py` | Script flown in **E3** (`--no-flow`; v7.2 plus an EKF absolute-position take-off gate and in-flight guard) |
+| `flight_code/vqa_ekf_ab_test_v7.2.py` | Companion-computer script flown in **E1** (optical flow on). SHA-256 `f14b40fea566313a…`, recorded in all 45 E1 sortie summaries (its internal `SCRIPT_VERSION` string reads v7.1) |
+| `flight_code/vqa_ekf_e3_V1.py` | Script flown in **E3** (`--no-flow`; v7.2 plus an EKF absolute-position take-off gate and in-flight guard). SHA-256 `b2b918ce3308c2b0…`, recorded in every E3 sortie summary (`SCRIPT_VERSION` v7.3) |
 | `flight_code/G1_diff_v7.2_vs_e3V1.diff` | Line-by-line difference between the two scripts (gate G1) |
 | `flight_code/tools/check_attitude_link.py` | MAVLink attitude-stream check used before each campaign |
 | `model_fit/fit_vqa_model_handheld.py` | Truth-free hand-held fit of σ_b, p, q |
