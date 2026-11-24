@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+message: "If you use this code or data, please cite the article and this archive."
+title: "VQA-EKF: quality-adaptive vision noise for marker-based landing in ArduPilot EKF3 — code, parameters and flight data"
+type: software
+license: MIT
+repository-code: "https://github.com/kartikenc/vqa-ekf-ardupilot-landing"
+version: "1.0.0"
+date-released: "2026-11-24"
+keywords: [precision landing, fiducial markers, adaptive measurement noise, extended Kalman filter, GNSS-denied navigation, ArduPilot, UAV]
+authors:
+  - family-names: Cholachgudda
+    given-names: Kartik E.
+    orcid: "https://orcid.org/0000-0002-9217-6884"
+    affiliation: "REVA University, Bengaluru, India"
+    email: kartik.c@reva.edu.in
+  - family-names: Patil
+    given-names: Shanawaz
+    orcid: "https://orcid.org/0000-0001-5334-9415"
+    affiliation: "REVA University, Bengaluru, India"
+  - family-names: Megharaj
+    given-names: Manish T.
+    affiliation: "REVA University, Bengaluru, India"
+  - family-names: Kadam
+    given-names: Atharv
+    affiliation: "REVA University, Bengaluru, India"
+  - family-names: Sudharshan
+    given-names: K. M.
+    orcid: "https://orcid.org/0000-0002-7654-1351"
+    affiliation: "REVA University, Bengaluru, India"
+  - family-names: Lakshmipathaiah
+    given-names: Mahesh
+    orcid: "https://orcid.org/0000-0001-7108-3032"
+    affiliation: "REVA University, Bengaluru, India"

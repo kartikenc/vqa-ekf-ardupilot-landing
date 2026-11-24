@@ -1,0 +1,132 @@
+3c3
+< vqa_ekf_ab_test_v7.1.py — VQA-EKF controlled flight experiment (Paper 1, IEEE RA-L)
+---
+> vqa_ekf_ab_test_v7.3.py — VQA-EKF controlled flight experiment (Paper 1, IEEE RA-L)
+5c5,6
+< Script version 7.1: v6.1c + EKF-ONLY landing (marker-centred landing removed) + 3 robustness fixes.
+---
+> Script version 7.3: v7.2 (= v7.1 + RGB-fitted VQA model) + Experiment-3 (no optical flow)
+> safety gate on the EKF position status. Flight profile, landing, sigma per arm: unchanged.
+79c80
+< SCRIPT_VERSION = "v7.1"
+---
+> SCRIPT_VERSION = "v7.3"
+177a179,185
+> # v7.3 - Experiment 3 (--no-flow). Without optical flow, vision is the ONLY horizontal aid, so
+> # the EKF must be in absolute-position aiding before take-off. EKF_STATUS_REPORT flags:
+> EKF_POS_HORIZ_ABS   = 16      # EKF3: !posTimeout && AID_ABSOLUTE && healthy
+> EKF_CONST_POS_MODE  = 128     # EKF3: no aiding at all (AID_NONE)
+> EKF_GATE_S          = 2.0     # --no-flow: absolute position OK continuously this long before take-off
+> EKF_LOST_ABORT_S    = 1.0     # --no-flow: in flight, abort (LAND) if it is lost this long
+> E3_WINDOW_LOCAL     = (10.0, 15.5)   # E3 protocol: fly 10:00-15:30 local (low-sun glare, E1)
+193c201
+< VQA = dict(sigma_base_m=0.0226, tilt_exp_p=5.25, blur_exp_q=0.69,
+---
+> VQA = dict(sigma_base_m=0.0226, tilt_exp_p=5.25, blur_exp_q=0.69,     # v7.2: RGB fit (gate G1)
+198,199c206,207
+< # NOTE (v6): the VQA constants above were fitted on IR1 images. Colour-camera blur values
+< # are on a different scale, so refit sigma_base / p / q on RGB data (milestone M3).
+---
+> # v7.2: constants refitted on RGB data with fit_vqa_model_handheld.py (gate G1); frozen
+> # for E1 and E3 (sigma_base set so the sharpest level frames sit at the 1 cm EKF3 floor).
+477a486
+>         self.ekf_flags = (None, 0.0)                   # v7.3: EKF_STATUS_REPORT flags, host time
+573a583,591
+>         elif typ == "EKF_STATUS_REPORT":                             # v7.3
+>             flags = int(msg.flags)
+>             with self.lock:
+>                 prev = self.ekf_flags[0]
+>                 self.ekf_flags = (flags, t_host)
+>             if prev != flags and self.events_cb:
+>                 self.events_cb("EKF_FLAGS", flags=flags,
+>                                pos_horiz_abs=bool(flags & EKF_POS_HORIZ_ABS),
+>                                const_pos_mode=bool(flags & EKF_CONST_POS_MODE))
+616a635,643
+>     def ekf_status(self):
+>         """v7.3: (flags or None, age_ms, absolute_position_ok)."""
+>         with self.lock:
+>             flags, t = self.ekf_flags
+>         age = (now() - t) * 1000.0 if flags is not None else float("inf")
+>         ok = (flags is not None and age < 1000.0 and bool(flags & EKF_POS_HORIZ_ABS)
+>               and not flags & EKF_CONST_POS_MODE)
+>         return flags, age, ok
+> 
+1211a1239,1242
+>     ekf_ok_since, ekf_print_t = None, 0.0                    # v7.3 (--no-flow only)
+>     if args.no_flow:
+>         print(">>> E3 (no optical flow): take-off only after the EKF reports ABSOLUTE position "
+>               f"for {EKF_GATE_S:g} s (camera must see the marker on the pad).")
+1212a1244,1251
+>         if args.no_flow:
+>             flags, ekf_age, ekf_ok = link.ekf_status()
+>             ekf_ok_since = (ekf_ok_since or now()) if ekf_ok else None
+>             if now() - ekf_print_t > 3.0:
+>                 state = ("OK" if ekf_ok else "NOT READY") + \
+>                     (f" (flags 0x{flags:04x})" if flags is not None else " (no EKF_STATUS_REPORT yet)")
+>                 print(f"[EKF] absolute horizontal position: {state}")
+>                 ekf_print_t = now()
+1221c1260,1262
+<             if att_age < MAX_ATT_AGE_MS:                      # v6.1a: no minimum height any more
+---
+>             ekf_ready = (not args.no_flow) or (ekf_ok_since is not None
+>                                                and now() - ekf_ok_since >= EKF_GATE_S)
+>             if att_age < MAX_ATT_AGE_MS and ekf_ready:        # v6.1a: no minimum height any more
+1223c1264,1270
+<             if now() - warn_t > 3.0:                          # tilt would read 0.0 (bench symptom)
+---
+>             if att_age < MAX_ATT_AGE_MS and not ekf_ready and now() - warn_t > 3.0:
+>                 print("[FLT] GUIDED but the EKF has NO ABSOLUTE POSITION — NOT taking off. "
+>                       "Check the marker is in view; if it stays NOT READY, disarm and reboot "
+>                       "the flight controller.")
+>                 log.event("GUIDED_NO_EKF_POSITION", flags=link.ekf_status()[0])
+>                 warn_t = now()
+>             elif att_age >= MAX_ATT_AGE_MS and now() - warn_t > 3.0:   # tilt would read 0.0
+1236a1284,1285
+>     result["ekf_flags_at_start"] = link.ekf_status()[0]         # v7.3 (all experiments)
+>     log.event("EKF_STATUS_AT_START", flags=result["ekf_flags_at_start"])
+1249a1299
+>     ekf_bad = {"t": None}                                       # v7.3 (--no-flow only)
+1263a1314,1320
+>         if args.no_flow:                                         # v7.3: vision is the only aid
+>             if not link.ekf_status()[2]:
+>                 ekf_bad["t"] = ekf_bad["t"] or now()
+>                 if now() - ekf_bad["t"] > EKF_LOST_ABORT_S:
+>                     return "ekf_no_position"
+>             else:
+>                 ekf_bad["t"] = None
+2184c2241,2242
+<                         (M.MAVLINK_MSG_ID_EXTENDED_SYS_STATE, 5)):      # v6.1a: landed state
+---
+>                         (M.MAVLINK_MSG_ID_EXTENDED_SYS_STATE, 5),       # v6.1a: landed state
+>                         (M.MAVLINK_MSG_ID_EKF_STATUS_REPORT, 5)):       # v7.3: EKF aiding status
+2187a2246,2253
+>     if args.no_flow and not args.bench:
+>         lt = time.localtime()
+>         hour = lt.tm_hour + lt.tm_min / 60.0
+>         if not E3_WINDOW_LOCAL[0] <= hour <= E3_WINDOW_LOCAL[1]:
+>             print(f"[PRE] WARNING: local time {lt.tm_hour:02d}:{lt.tm_min:02d} is outside the E3 window "
+>                   "10:00-15:30 (low sun -> marker glare -> detection gaps; with no optical flow a gap "
+>                   "of 1.5 s lands the drone). Fly only inside the window.")
+>             log.event("OUTSIDE_E3_WINDOW", local_time=f"{lt.tm_hour:02d}:{lt.tm_min:02d}")
+2191,2193c2257,2258
+<     if args.camera == "rgb":
+<         print("[CAM] NOTE: the VQA sigma constants were fitted on IR images — refit them on RGB "
+<               "data (M3) before the campaign. Arm B runs, but its sigma scale is provisional.")
+---
+>     print(f"[PRE] VQA model: sigma_base {VQA['sigma_base_m']:.4f} m, p {VQA['tilt_exp_p']:.2f}, "
+>           f"q {VQA['blur_exp_q']:.2f} (blur: {BLUR_FOR_MODEL})")
+2347a2413
+>         ekf_flags_at_start=result.get("ekf_flags_at_start"),
+2545a2612,2623
+> # v7.2 (user): v7.1 + VQA model refitted on RGB data (sigma_base 0.0226 m, p 5.25, q 0.69).
+> #      Flown for the whole E1 campaign (45 sorties).
+> # v7.3 (Experiment 3 support; E1 profile, landing and per-arm sigma unchanged):
+> #  E1  EKF_STATUS_REPORT requested at 5 Hz and logged (EKF_FLAGS events on every change,
+> #      flags at the GUIDED start in the summary) in every experiment - logging only.
+> #  E2  --no-flow: take-off only after the EKF reports absolute horizontal position
+> #      (POS_HORIZ_ABS set, CONST_POS_MODE clear) for 2 s. Without flow, EKF3 has no other
+> #      horizontal aid (AP_NavEKF3_Control.cpp updateFilterStatus).
+> #  E3  --no-flow: in flight, abort -> LAND if that status is lost for 1 s ("ekf_no_position").
+> #  E4  --no-flow: warning + event if started outside 10:00-15:30 local (E1: low-sun glare on
+> #      the semi-gloss marker cut detection from 95 % to 77 %).
+> #  E5  Removed the v6 start-up note about IR-fitted constants; prints the model in use.

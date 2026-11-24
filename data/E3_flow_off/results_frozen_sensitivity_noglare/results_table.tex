@@ -1,0 +1,31 @@
+% requires \usepackage{booktabs}
+\begin{table*}[t]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{6pt}
+\caption{Flight results per arm, median [IQR] over sorties. Truth from the pad grid at the RGB optical centre (camera point, pre-registered primary outcome). The controlled point is the autopilot body origin, offset from the camera by \texttt{VISO\_POS}.}
+\label{tab:results}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+Metric & A: const.\ 20\,cm & A$'$: tuned const. & B: VQA-EKF \\
+\midrule
+Valid sorties & 13 & 13 & 12 \\
+\multicolumn{4}{@{}l}{\emph{Touchdown}} \\
+\quad Error, camera point (cm) & 13.5 [11.9, 17.1] & 13.5 [11.0, 15.2] & 12.0 [11.4, 13.8] \\
+\quad Error, controlled point (cm) & 4.0 [2.5, 6.3] & 2.7 [1.1, 6.1] & 2.2 [1.0, 3.4] \\
+\quad Distance to arm centroid (cm) & 4.4 [2.5, 5.3] & 3.4 [1.7, 4.9] & 2.2 [1.3, 2.6] \\
+\quad EKF error at last fix (cm) & 2.7 [2.2, 3.6] & 2.2 [1.5, 3.5] & 2.4 [1.0, 3.4] \\
+\quad Blind-segment drift (cm) & 2.6 [1.4, 4.1] & 3.1 [2.2, 4.3] & 1.6 [1.1, 1.9] \\
+\multicolumn{4}{@{}l}{\emph{Step response}} \\
+\quad Overshoot after step (cm) & 3.8 [3.3, 7.6] & 3.3 [2.5, 4.5] & 3.3 [2.8, 5.5] \\
+\quad Settling time to 5\,cm (s) & 1.2 [1.1, 14.2] & 1.2 [1.2, 4.4] & 1.3 [1.2, 5.5] \\
+\quad Hold RMS (cm) & 2.5 [2.2, 4.8] & 2.0 [1.6, 2.9] & 1.9 [1.6, 2.1] \\
+\multicolumn{4}{@{}l}{\emph{Estimator and conditions (maneuver)}} \\
+\quad $\sigma$ used, median (cm) & 20.00 & 1.14 & 1.15 [1.13, 1.16] \\
+\quad $\sigma$ used, p95 (cm) & 20.00 & 1.14 & 1.33 [1.28, 1.38] \\
+\quad Mean position NIS (ideal 2) & 0.00 & 0.08 [0.08, 0.10] & 0.08 [0.07, 0.09] \\
+\quad Marker detection (\%) & 97 [97, 98] & 96 [95, 96] & 96 \\
+\quad Max tilt (deg) & 18.7 [18.6, 18.9] & 18.9 [18.8, 19.2] & 18.8 [18.6, 19.0] \\
+\bottomrule
+\end{tabular}
+\end{table*}

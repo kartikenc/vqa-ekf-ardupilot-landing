@@ -1,0 +1,760 @@
+(vqa-env) ascend@ascend:~/folder$ python3 vqa_ekf_e3_V1.py --no-flow --experiment E3P --log-root ~/vqa_pilot_E3:E3P_01 --mode tuned --sigma-tuned 0.0114
+============================================================
+  VQA-EKF EXPERIMENT v7.3 — Arm A' (tuned constant)
+  sortie 20261117_170701   experiment E3P   camera RGB   OPTICAL FLOW OFF   logs: /home/ascend/vqa_pilot_E3:E3P_01/tuned_20261117_170701
+============================================================
+[MAV] Connecting /dev/ttyAMA2 @ 921600 (MAVLink 2)...
+[MAV] Protocol: script MAVLink 2, flight controller MAVLink 2
+[MAV] Connected sys=1
+[PRE] Reading flight-controller parameters...
+      AHRS_EKF_TYPE      = 3.0
+      EK3_SRC1_POSXY     = 6.0
+      EK3_SRC1_VELXY     = 0.0
+      EK3_SRC1_POSZ      = 2.0
+      EK3_SRC1_VELZ      = 0.0
+      EK3_SRC1_YAW       = 6.0
+      EK3_SRC_OPTIONS    = 0.0
+      VISO_TYPE          = 1.0
+      VISO_SCALE         = 1.0
+      VISO_QUAL_MIN      = 0.0
+      VISO_POS_M_NSE     = 0.009999999776482582
+      VISO_YAW_M_NSE     = 0.10000000149011612
+      EK3_FLOW_USE       = 1.0
+      FLOW_TYPE          = 6.0
+      GUID_OPTIONS       = 4.0
+      VISO_DELAY_MS      = 55.0
+      VISO_POS_X         = 0.10999999940395355
+      VISO_POS_Y         = 0.0
+      VISO_POS_Z         = 0.05000000074505806
+      VISO_ORIENT        = 0.0
+      EK3_POS_I_GATE     = 500.0
+      WPNAV_ACCEL        = 400.0
+      WPNAV_SPEED        = 1000.0
+      ANGLE_MAX          = 3000.0
+      RNGFND1_MIN_CM     = 10.0
+      RNGFND1_GNDCLEAR   = 17.0
+[PRE] landing: EKF only, straight down at 0.20 m/s to the EKF origin (camera offset 0.110, 0.000 m used for logging only)
+[PRE] WARNING: local time 17:07 is outside the E3 window 10:00-15:30 (low sun -> marker glare -> detection gaps; with no optical flow a gap of 1.5 s lands the drone). Fly only inside the window.
+[CAM] Auto-exposure ON
+[CAM] RGB 640x480@30  fx=384.5 fy=384.0  FOV 79.5 x 64.0 deg  lens model inverse_brown_conrady [-0.0567, 0.0666, 0.0005, 0.0009, -0.0213]
+[PRE] VQA model: sigma_base 0.0226 m, p 5.25, q 0.69 (blur: full_clahe)
+[PRE] FOV nose=64.0 right=79.5 deg -> axis 'right', max safe step 0.52 m at 2.0 m / 20.0 deg tilt; using 0.47 m
+[PRE] Mission plan at 2.0 m: TAKEOFF (max) 8 s, SETTLE (max) 7 s, HOVER_BASE 30 s, MANEUVER (11 x 4 s) 44 s, CONVERGE 15 s, DESCENT (pad ref) 1 s, LANDING (EKF only, min) 10 s  -> about 115 s
+[FLT] -> WAIT_PILOT
+
+============================================================
+[VIS] Thread started.
+>>> PILOT: drone on the platform/pad, camera over the marker, nose along +X.
+>>>        Arm in STABILIZE and switch to GUIDED at ANY height (ground included):
+>>>        on the ground the script takes off by itself after 2 s.
+>>> Pilot keeps RC override at all times (mode switch = abort).
+============================================================
+
+>>> E3 (no optical flow): take-off only after the EKF reports ABSOLUTE position for 2 s (camera must see the marker on the pad).
+[EKF] absolute horizontal position: NOT READY (flags 0x00e7)
+[FC] PreArm: RC not found
+[FC] PreArm: VisOdom: not healthy
+[FC] EKF3 IMU0 is using external nav data
+[FC] EKF3 IMU0 initial pos NED = -0.0,0.0,-0.2 (m)
+[EKF] absolute horizontal position: OK (flags 0x037f)
+[EKF] absolute horizontal position: OK (flags 0x037f)
+[EKF] absolute horizontal position: OK (flags 0x037f)
+[EKF] absolute horizontal position: OK (flags 0x037f)
+[EKF] absolute horizontal position: OK (flags 0x037f)
+[EKF] absolute horizontal position: OK (flags 0x037f)
+[EKF] absolute horizontal position: OK (flags 0x037f)
+[EKF] absolute horizontal position: OK (flags 0x037f)
+[FC] RCInput: decoding PPM(1)
+[EKF] absolute horizontal position: OK (flags 0x037f)
+[EKF] absolute horizontal position: OK (flags 0x037f)
+[EKF] absolute horizontal position: OK (flags 0x037f)
+[EKF] absolute horizontal position: OK (flags 0x037f)
+[EKF] absolute horizontal position: OK (flags 0x037f)
+[EKF] absolute horizontal position: OK (flags 0x037f)
+[EKF] absolute horizontal position: OK (flags 0x037f)
+[EKF] absolute horizontal position: OK (flags 0x037f)
+[EKF] absolute horizontal position: OK (flags 0x037f)
+[EKF] absolute horizontal position: OK (flags 0x037f)
+[FLT] -> TAKEOFF
+[FLT] note: heading +90 deg from pad +X. Steps are rotated to stay on the drone's own axis, so this is safe; pad dx/dy stay in pad frame.
+[FLT] TAKE-OFF in 2 s — switch out of GUIDED to cancel
+[DIAG] TAKEOFF    fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 1.4 blur= 566 sigma_sent=1.1cm
+[FLT] sortie aborted: disarmed
+[FLT] commanding finished — vision keeps feeding EKF3 until DISARM.
+[MAIN] DISARMED — stopping vision.
+
+============================================================
+GROUND TRUTH — measure on the pad grid, BEFORE moving the drone:
+  reference point = centroid of the landing-gear contact points
+  dx = offset along pad +X arrow, dy = along pad +Y arrow, in cm
+  (the sortie is ALREADY saved. Enter or Ctrl-C skips; add it later with
+   --add-touchdown <SORTIE_ID> <DX_CM> <DY_CM>)
+  dx_cm dy_cm > ^C
+  skipped — add it later with --add-touchdown
+
+============================================================
+  SORTIE SUMMARY - Arm A' (tuned constant)   (20261117_170701)
+============================================================
+  1 Manipulation  sigma sent HOVER_BASE n/a
+                  sigma sent MANEUVER   n/a
+                  (A: flat 20 cm | A': flat tuned | B: must vary with tilt/blur;
+                   confirm with VISP.PErr in the .bin)
+  2 Maneuver      tilt n/a   max nan deg   accepted 0/0 frames, tilt-gated 0
+  3 Pipeline      latency capture->send median 53.5 ms  (VISO_DELAY_MS should ~ this + camera/UART)
+  4 EKF at disarm  N=-0.012 E=-0.114 m  (self-reported - NOT ground truth)
+  5 TRUTH touchdown  not entered - later: --add-touchdown 20261117_170701 DX_CM DY_CM
+  completed=False  reason=disarmed   logs: /home/ascend/vqa_pilot_E3:E3P_01/tuned_20261117_170701
+  LEDGER  added 20261117_170701 [A'] valid=0 (sigma check FAILED) - 1 sortie(s) of this arm in E3P
+          table any time:  python3 vqa_ekf_e3_V1.py --compare
+  NEXT: copy this flight's DataFlash .bin into the folder above.
+============================================================
+(vqa-env) ascend@ascend:~/folder$ python3 vqa_ekf_e3_V1.py --no-flow --experiment E3P --log-root ~/vqa_pilot_E3:E3P_01 --mode tuned --sigma-tuned 0.0114
+============================================================
+  VQA-EKF EXPERIMENT v7.3 — Arm A' (tuned constant)
+  sortie 20261117_170813   experiment E3P   camera RGB   OPTICAL FLOW OFF   logs: /home/ascend/vqa_pilot_E3:E3P_01/tuned_20261117_170813
+============================================================
+[MAV] Connecting /dev/ttyAMA2 @ 921600 (MAVLink 2)...
+[MAV] Protocol: script MAVLink 2, flight controller MAVLink 2
+[MAV] Connected sys=1
+[PRE] Reading flight-controller parameters...
+      AHRS_EKF_TYPE      = 3.0
+      EK3_SRC1_POSXY     = 6.0
+      EK3_SRC1_VELXY     = 0.0
+      EK3_SRC1_POSZ      = 2.0
+      EK3_SRC1_VELZ      = 0.0
+      EK3_SRC1_YAW       = 6.0
+      EK3_SRC_OPTIONS    = 0.0
+      VISO_TYPE          = 1.0
+      VISO_SCALE         = 1.0
+      VISO_QUAL_MIN      = 0.0
+      VISO_POS_M_NSE     = 0.009999999776482582
+      VISO_YAW_M_NSE     = 0.10000000149011612
+      EK3_FLOW_USE       = 1.0
+      FLOW_TYPE          = 6.0
+      GUID_OPTIONS       = 4.0
+      VISO_DELAY_MS      = 55.0
+      VISO_POS_X         = 0.10999999940395355
+      VISO_POS_Y         = 0.0
+      VISO_POS_Z         = 0.05000000074505806
+      VISO_ORIENT        = 0.0
+      EK3_POS_I_GATE     = 500.0
+      WPNAV_ACCEL        = 400.0
+      WPNAV_SPEED        = 1000.0
+      ANGLE_MAX          = 3000.0
+      RNGFND1_MIN_CM     = 10.0
+      RNGFND1_GNDCLEAR   = 17.0
+[PRE] landing: EKF only, straight down at 0.20 m/s to the EKF origin (camera offset 0.110, 0.000 m used for logging only)
+[PRE] WARNING: local time 17:08 is outside the E3 window 10:00-15:30 (low sun -> marker glare -> detection gaps; with no optical flow a gap of 1.5 s lands the drone). Fly only inside the window.
+[CAM] Auto-exposure ON
+[CAM] RGB 640x480@30  fx=384.5 fy=384.0  FOV 79.5 x 64.0 deg  lens model inverse_brown_conrady [-0.0567, 0.0666, 0.0005, 0.0009, -0.0213]
+[PRE] VQA model: sigma_base 0.0226 m, p 5.25, q 0.69 (blur: full_clahe)
+[PRE] FOV nose=64.0 right=79.5 deg -> axis 'right', max safe step 0.52 m at 2.0 m / 20.0 deg tilt; using 0.47 m
+[PRE] Mission plan at 2.0 m: TAKEOFF (max) 8 s, SETTLE (max) 7 s, HOVER_BASE 30 s, MANEUVER (11 x 4 s) 44 s, CONVERGE 15 s, DESCENT (pad ref) 1 s, LANDING (EKF only, min) 10 s  -> about 115 s
+[VIS] Thread started.
+[FLT] -> WAIT_PILOT
+
+============================================================
+>>> PILOT: drone on the platform/pad, camera over the marker, nose along +X.
+>>>        Arm in STABILIZE and switch to GUIDED at ANY height (ground included):
+>>>        on the ground the script takes off by itself after 2 s.
+>>> Pilot keeps RC override at all times (mode switch = abort).
+============================================================
+
+>>> E3 (no optical flow): take-off only after the EKF reports ABSOLUTE position for 2 s (camera must see the marker on the pad).
+[EKF] absolute horizontal position: NOT READY (no EKF_STATUS_REPORT yet)
+[FC] EKF variance
+[FC] EKF3 IMU0 is using external nav data
+[FC] EKF3 IMU0 initial pos NED = -0.0,-0.0,-0.2 (m)
+[EKF] absolute horizontal position: OK (flags 0x037f)
+[EKF] absolute horizontal position: OK (flags 0x037f)
+[FLT] -> TAKEOFF
+[FLT] note: heading +90 deg from pad +X. Steps are rotated to stay on the drone's own axis, so this is safe; pad dx/dy stay in pad frame.
+[FLT] TAKE-OFF in 2 s — switch out of GUIDED to cancel
+[DIAG] TAKEOFF    fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 1.4 blur= 565 sigma_sent=1.1cm
+[DIAG] TAKEOFF    fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 1.4 blur= 571 sigma_sent=1.1cm
+[DIAG] TAKEOFF    fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 1.5 blur= 545 sigma_sent=1.1cm
+[FLT] airborne
+[DIAG] TAKEOFF    fps=30 det=29 acc=29 gate= 0 out= 0 tilt= 2.8 blur= 401 sigma_sent=1.1cm
+[DIAG] TAKEOFF    fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 1.0 blur= 732 sigma_sent=1.1cm
+[FLT] -> SETTLE
+[FLT] -> HOVER_BASE
+[DIAG] HOVER_BASE fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.6 blur=1087 sigma_sent=1.1cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.2 blur= 995 sigma_sent=1.1cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.2 blur= 909 sigma_sent=1.1cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.3 blur=1089 sigma_sent=1.1cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.3 blur=1061 sigma_sent=1.1cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.1 blur= 989 sigma_sent=1.1cm
+[DIAG] HOVER_BASE fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.3 blur=1037 sigma_sent=1.1cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.2 blur=1081 sigma_sent=1.1cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.4 blur=1055 sigma_sent=1.1cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.3 blur= 957 sigma_sent=1.1cm
+[DIAG] HOVER_BASE fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.3 blur=1067 sigma_sent=1.1cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.2 blur=1054 sigma_sent=1.1cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.4 blur=1108 sigma_sent=1.1cm
+[DIAG] HOVER_BASE fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.3 blur=1118 sigma_sent=1.1cm
+[DIAG] HOVER_BASE fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.3 blur=1036 sigma_sent=1.1cm
+[DIAG] HOVER_BASE fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.3 blur= 929 sigma_sent=1.1cm
+[DIAG] HOVER_BASE fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.4 blur=1039 sigma_sent=1.1cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.6 blur= 978 sigma_sent=1.1cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.1 blur=1068 sigma_sent=1.1cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.4 blur=1072 sigma_sent=1.1cm
+[DIAG] HOVER_BASE fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.3 blur=1051 sigma_sent=1.1cm
+[DIAG] HOVER_BASE fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.7 blur= 974 sigma_sent=1.1cm
+[DIAG] HOVER_BASE fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.4 blur=1077 sigma_sent=1.1cm
+[DIAG] HOVER_BASE fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.1 blur= 997 sigma_sent=1.1cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.2 blur=1066 sigma_sent=1.1cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.4 blur= 974 sigma_sent=1.1cm
+[DIAG] HOVER_BASE fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.2 blur=1030 sigma_sent=1.1cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.3 blur=1054 sigma_sent=1.1cm
+[DIAG] HOVER_BASE fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.3 blur= 930 sigma_sent=1.1cm
+[FLT] -> MANEUVER
+[DIAG] MANEUVER   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 1.1 blur= 681 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=30 det=27 acc=27 gate= 0 out= 0 tilt= 5.2 blur= 876 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 1.1 blur= 973 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.4 blur=1046 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 2.4 blur= 528 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=30 det=11 acc=11 gate= 0 out= 0 tilt= 8.5 blur= 703 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.7 blur= 676 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 1.0 blur=1070 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=30 det=29 acc=29 gate= 0 out= 0 tilt= 4.9 blur= 519 sigma_sent=-
+[DIAG] MANEUVER   fps=31 det=10 acc=10 gate= 0 out= 0 tilt= 8.0 blur= 776 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 1.1 blur= 956 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 1.0 blur=1043 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=31 det=29 acc=29 gate= 0 out= 0 tilt=11.7 blur= 399 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=30 det=10 acc=10 gate= 0 out= 0 tilt=10.0 blur= 900 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 1.3 blur= 674 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.7 blur=1100 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=31 det=25 acc=25 gate= 0 out= 0 tilt=16.1 blur= 506 sigma_sent=-
+[DIAG] MANEUVER   fps=31 det= 9 acc= 9 gate= 0 out= 0 tilt= 8.0 blur= 373 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 1.0 blur= 977 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.7 blur=1103 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=31 det=25 acc=25 gate= 0 out= 0 tilt=18.1 blur= 672 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=30 det=17 acc=17 gate= 0 out= 0 tilt= 9.6 blur=1034 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=30 det=26 acc=26 gate= 0 out= 0 tilt= 3.5 blur= 837 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.7 blur=1054 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=31 det=26 acc=26 gate= 0 out= 0 tilt=18.6 blur= 889 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=31 det=14 acc=14 gate= 0 out= 0 tilt= 8.0 blur= 850 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 2.4 blur= 950 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.8 blur= 845 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=31 det=21 acc=21 gate= 0 out= 0 tilt=17.2 blur= 467 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=30 det=18 acc=18 gate= 0 out= 0 tilt= 7.9 blur= 951 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 2.5 blur= 956 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.4 blur=1099 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=30 det=23 acc=23 gate= 0 out= 0 tilt=16.6 blur= 520 sigma_sent=-
+[DIAG] MANEUVER   fps=31 det=12 acc=12 gate= 0 out= 0 tilt= 6.2 blur= 767 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 2.1 blur= 988 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.8 blur= 997 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=31 det=18 acc=18 gate= 0 out= 0 tilt=13.5 blur= 447 sigma_sent=-
+[DIAG] MANEUVER   fps=31 det=19 acc=19 gate= 0 out= 0 tilt= 4.9 blur= 838 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 1.6 blur=1070 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 1.1 blur=1089 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=31 det=24 acc=24 gate= 0 out= 0 tilt= 2.3 blur= 332 sigma_sent=-
+[DIAG] MANEUVER   fps=30 det=23 acc=23 gate= 0 out= 0 tilt= 1.5 blur= 974 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 1.4 blur=1138 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.2 blur=1036 sigma_sent=1.1cm
+[FLT] -> CONVERGE
+[DIAG] CONVERGE   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.3 blur=1137 sigma_sent=1.1cm
+[DIAG] CONVERGE   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.5 blur=1063 sigma_sent=1.1cm
+[DIAG] CONVERGE   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.0 blur=1055 sigma_sent=1.1cm
+[DIAG] CONVERGE   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.3 blur=1108 sigma_sent=1.1cm
+[DIAG] CONVERGE   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 1.0 blur=1107 sigma_sent=1.1cm
+[DIAG] CONVERGE   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.7 blur=1059 sigma_sent=1.1cm
+[DIAG] CONVERGE   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.4 blur=1020 sigma_sent=1.1cm
+[DIAG] CONVERGE   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.5 blur=1104 sigma_sent=1.1cm
+[DIAG] CONVERGE   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.3 blur=1084 sigma_sent=1.1cm
+[DIAG] CONVERGE   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.3 blur=1108 sigma_sent=1.1cm
+[DIAG] CONVERGE   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.4 blur=1071 sigma_sent=1.1cm
+[DIAG] CONVERGE   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.6 blur=1062 sigma_sent=1.1cm
+[DIAG] CONVERGE   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.5 blur=1112 sigma_sent=1.1cm
+[DIAG] CONVERGE   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.7 blur=1053 sigma_sent=1.1cm
+[DIAG] CONVERGE   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 1.0 blur=1160 sigma_sent=1.1cm
+[FLT] -> DESCENT
+[DIAG] DESCENT    fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.5 blur=1046 sigma_sent=1.1cm
+[FLT] pad at EKF z -0.36 m (rangefinder, rangefinder on pad 0.17 m)
+[FLT] -> LANDING
+[LND] height 1.64 m | EKF off origin  1.5 cm | marker seen
+[DIAG] LANDING    fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.4 blur=1119 sigma_sent=1.1cm
+[LND] height 1.53 m | EKF off origin  2.8 cm | marker seen
+[DIAG] LANDING    fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.8 blur= 884 sigma_sent=1.1cm
+[LND] height 1.32 m | EKF off origin  4.4 cm | marker seen
+[DIAG] LANDING    fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.1 blur= 992 sigma_sent=1.1cm
+[LND] height 1.11 m | EKF off origin  2.4 cm | marker seen
+[LND] height 0.89 m | EKF off origin  2.9 cm | marker seen
+[DIAG] LANDING    fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 1.1 blur= 766 sigma_sent=1.1cm
+[LND] height 0.70 m | EKF off origin  2.0 cm | marker seen
+[DIAG] LANDING    fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.1 blur= 830 sigma_sent=1.1cm
+[LND] height 0.49 m | EKF off origin  5.6 cm | marker seen
+[DIAG] LANDING    fps=29 det=29 acc=29 gate= 0 out= 0 tilt= 0.3 blur= 724 sigma_sent=1.1cm
+[DIAG] LANDING    fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.5 blur= 592 sigma_sent=1.1cm
+[LND] height 0.31 m | EKF off origin  2.5 cm | marker seen
+[LND] height 0.09 m | EKF off origin  1.5 cm | marker seen
+[DIAG] LANDING    fps=31 det=26 acc=26 gate= 0 out= 0 tilt= 0.2 blur= 589 sigma_sent=1.1cm
+[LND] last marker fix at 0.05 m: CG +1.9, -0.7 cm from the marker; blind for 0.7 s
+[FLT] -> TOUCHDOWN
+[FLT] TOUCHDOWN detected (GUIDED landing, rangefinder 0.17 m) -> disarming now
+[FLT] commanding finished — vision keeps feeding EKF3 until DISARM.
+[MAIN] DISARMED — stopping vision.
+[DIAG] TOUCHDOWN  fps=31 det= 3 acc= 3 gate= 0 out= 0 tilt= 1.2 blur= 589 sigma_sent=-
+
+============================================================
+GROUND TRUTH — measure on the pad grid, BEFORE moving the drone:
+  reference point = centroid of the landing-gear contact points
+  dx = offset along pad +X arrow, dy = along pad +Y arrow, in cm
+  (the sortie is ALREADY saved. Enter or Ctrl-C skips; add it later with
+   --add-touchdown <SORTIE_ID> <DX_CM> <DY_CM>)
+  dx_cm dy_cm > 12 3.5
+  note (optional) >
+
+============================================================
+  SORTIE SUMMARY - Arm A' (tuned constant)   (20261117_170813)
+============================================================
+  1 Manipulation  sigma sent HOVER_BASE 1.1 cm [1.1-1.1]
+                  sigma sent MANEUVER   1.1 cm [1.1-1.1]
+                  (A: flat 20 cm | A': flat tuned | B: must vary with tilt/blur;
+                   confirm with VISP.PErr in the .bin)
+  2 Maneuver      tilt 2.0 deg [0.4-14.3]   max 18.9 deg   accepted 1098/1324 frames, tilt-gated 0
+  3 Pipeline      latency capture->send median 53.0 ms  (VISO_DELAY_MS should ~ this + camera/UART)
+  4 EKF at disarm  N=+0.050 E=+0.008 m  (self-reported - NOT ground truth)
+  5 TRUTH touchdown  dx=+12.0 dy=+3.5 radial=12.5 cm   <-- primary outcome
+  completed=True   logs: /home/ascend/vqa_pilot_E3:E3P_01/tuned_20261117_170813
+  LEDGER  replaced 20261117_170813 [A'] valid=1 (sigma check OK) - 2 sortie(s) of this arm in E3P
+          table any time:  python3 vqa_ekf_e3_V1.py --compare
+  NEXT: copy this flight's DataFlash .bin into the folder above.
+============================================================
+(vqa-env) ascend@ascend:~/folder$ python3 vqa_ekf_e3_V1.py --no-flow --experiment E3P --log-root ~/vqa_pilot_E3:E3P_02 --mode adaptive
+============================================================
+  VQA-EKF EXPERIMENT v7.3 — Arm B (VQA-EKF adaptive)
+  sortie 20261117_171127   experiment E3P   camera RGB   OPTICAL FLOW OFF   logs: /home/ascend/vqa_pilot_E3:E3P_02/adaptive_20261117_171127
+============================================================
+[MAV] Connecting /dev/ttyAMA2 @ 921600 (MAVLink 2)...
+[MAV] Protocol: script MAVLink 2, flight controller MAVLink 2
+[MAV] Connected sys=1
+[PRE] Reading flight-controller parameters...
+      AHRS_EKF_TYPE      = 3.0
+      EK3_SRC1_POSXY     = 6.0
+      EK3_SRC1_VELXY     = 0.0
+      EK3_SRC1_POSZ      = 2.0
+      EK3_SRC1_VELZ      = 0.0
+      EK3_SRC1_YAW       = 6.0
+      EK3_SRC_OPTIONS    = 0.0
+      VISO_TYPE          = 1.0
+      VISO_SCALE         = 1.0
+      VISO_QUAL_MIN      = 0.0
+      VISO_POS_M_NSE     = 0.009999999776482582
+      VISO_YAW_M_NSE     = 0.10000000149011612
+      EK3_FLOW_USE       = 1.0
+      FLOW_TYPE          = 6.0
+      GUID_OPTIONS       = 4.0
+      VISO_DELAY_MS      = 55.0
+      VISO_POS_X         = 0.10999999940395355
+      VISO_POS_Y         = 0.0
+      VISO_POS_Z         = 0.05000000074505806
+      VISO_ORIENT        = 0.0
+      EK3_POS_I_GATE     = 500.0
+      WPNAV_ACCEL        = 400.0
+      WPNAV_SPEED        = 1000.0
+      ANGLE_MAX          = 3000.0
+      RNGFND1_MIN_CM     = 10.0
+      RNGFND1_GNDCLEAR   = 17.0
+[PRE] landing: EKF only, straight down at 0.20 m/s to the EKF origin (camera offset 0.110, 0.000 m used for logging only)
+[PRE] WARNING: local time 17:11 is outside the E3 window 10:00-15:30 (low sun -> marker glare -> detection gaps; with no optical flow a gap of 1.5 s lands the drone). Fly only inside the window.
+[CAM] Auto-exposure ON
+[CAM] RGB 640x480@30  fx=384.5 fy=384.0  FOV 79.5 x 64.0 deg  lens model inverse_brown_conrady [-0.0567, 0.0666, 0.0005, 0.0009, -0.0213]
+[PRE] VQA model: sigma_base 0.0226 m, p 5.25, q 0.69 (blur: full_clahe)
+[PRE] FOV nose=64.0 right=79.5 deg -> axis 'right', max safe step 0.52 m at 2.0 m / 20.0 deg tilt; using 0.47 m
+[PRE] Mission plan at 2.0 m: TAKEOFF (max) 8 s, SETTLE (max) 7 s, HOVER_BASE 30 s, MANEUVER (11 x 4 s) 44 s, CONVERGE 15 s, DESCENT (pad ref) 1 s, LANDING (EKF only, min) 10 s  -> about 115 s
+[FLT] -> WAIT_PILOT
+
+============================================================[VIS] Thread started.
+
+>>> PILOT: drone on the platform/pad, camera over the marker, nose along +X.
+>>>        Arm in STABILIZE and switch to GUIDED at ANY height (ground included):
+>>>        on the ground the script takes off by itself after 2 s.
+>>> Pilot keeps RC override at all times (mode switch = abort).
+============================================================
+
+>>> E3 (no optical flow): take-off only after the EKF reports ABSOLUTE position for 2 s (camera must see the marker on the pad).
+[EKF] absolute horizontal position: NOT READY (no EKF_STATUS_REPORT yet)
+[EKF] absolute horizontal position: NOT READY (flags 0x00e7)
+[EKF] absolute horizontal position: NOT READY (flags 0x00e7)
+[EKF] absolute horizontal position: NOT READY (flags 0x00e7)
+[EKF] absolute horizontal position: NOT READY (flags 0x00e7)
+[FC] EKF3 IMU0 is using external nav data
+[FC] EKF3 IMU0 initial pos NED = -0.0,-0.0,-0.2 (m)
+[FC] PreArm: Need Position Estimate
+[EKF] absolute horizontal position: OK (flags 0x037f)
+[EKF] absolute horizontal position: OK (flags 0x037f)
+[EKF] absolute horizontal position: OK (flags 0x037f)
+[EKF] absolute horizontal position: OK (flags 0x037f)
+[EKF] absolute horizontal position: OK (flags 0x037f)
+[EKF] absolute horizontal position: OK (flags 0x037f)
+[EKF] absolute horizontal position: OK (flags 0x037f)
+[EKF] absolute horizontal position: OK (flags 0x037f)
+[EKF] absolute horizontal position: OK (flags 0x037f)
+[FLT] -> TAKEOFF
+[FLT] note: heading +90 deg from pad +X. Steps are rotated to stay on the drone's own axis, so this is safe; pad dx/dy stay in pad frame.
+[FLT] TAKE-OFF in 2 s — switch out of GUIDED to cancel
+[DIAG] TAKEOFF    fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 1.6 blur= 561 sigma_sent=1.2cm
+[DIAG] TAKEOFF    fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 1.6 blur= 552 sigma_sent=1.3cm
+[DIAG] TAKEOFF    fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 1.6 blur= 515 sigma_sent=1.3cm
+[FLT] airborne
+[DIAG] TAKEOFF    fps=30 det=28 acc=28 gate= 0 out= 0 tilt= 0.5 blur= 423 sigma_sent=1.4cm
+[DIAG] TAKEOFF    fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.2 blur= 647 sigma_sent=1.2cm
+[FLT] -> SETTLE
+[FLT] -> HOVER_BASE
+[DIAG] HOVER_BASE fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.5 blur=1088 sigma_sent=1.0cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.2 blur=1148 sigma_sent=1.0cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.1 blur=1044 sigma_sent=1.0cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.2 blur=1159 sigma_sent=1.0cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.1 blur=1102 sigma_sent=1.0cm
+[DIAG] HOVER_BASE fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.4 blur=1011 sigma_sent=1.0cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.5 blur=1080 sigma_sent=1.0cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.3 blur=1095 sigma_sent=1.0cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.5 blur=1070 sigma_sent=1.0cm
+[DIAG] HOVER_BASE fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.7 blur=1119 sigma_sent=1.0cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.2 blur=1084 sigma_sent=1.0cm
+[DIAG] HOVER_BASE fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.1 blur=1108 sigma_sent=1.0cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.5 blur=1053 sigma_sent=1.0cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.6 blur=1116 sigma_sent=1.0cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.4 blur=1076 sigma_sent=1.0cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.2 blur=1132 sigma_sent=1.0cm
+[DIAG] HOVER_BASE fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.3 blur=1140 sigma_sent=1.0cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.7 blur=1067 sigma_sent=1.0cm
+[DIAG] HOVER_BASE fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.4 blur=1094 sigma_sent=1.0cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.5 blur= 957 sigma_sent=1.0cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.7 blur=1155 sigma_sent=1.0cm
+[DIAG] HOVER_BASE fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.4 blur=1102 sigma_sent=1.0cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.8 blur=1073 sigma_sent=1.0cm
+[DIAG] HOVER_BASE fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.7 blur=1054 sigma_sent=1.0cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.3 blur=1117 sigma_sent=1.0cm
+[DIAG] HOVER_BASE fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.0 blur=1051 sigma_sent=1.0cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.0 blur=1115 sigma_sent=1.0cm
+[DIAG] HOVER_BASE fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 1.1 blur=1086 sigma_sent=1.0cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.7 blur=1082 sigma_sent=1.0cm
+[FLT] -> MANEUVER
+[DIAG] MANEUVER   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.2 blur=1076 sigma_sent=1.0cm
+[DIAG] MANEUVER   fps=31 det=27 acc=27 gate= 0 out= 0 tilt= 4.5 blur= 779 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 1.2 blur= 916 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.2 blur= 813 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.6 blur= 928 sigma_sent=1.0cm
+[DIAG] MANEUVER   fps=30 det= 3 acc= 3 gate= 0 out= 0 tilt= 8.7 blur= 349 sigma_sent=-
+[DIAG] MANEUVER   fps=31 det=29 acc=29 gate= 0 out= 0 tilt= 0.8 blur= 666 sigma_sent=1.2cm
+[DIAG] MANEUVER   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.8 blur= 918 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 1.2 blur= 931 sigma_sent=1.0cm
+[DIAG] MANEUVER   fps=30 det= 4 acc= 4 gate= 0 out= 0 tilt= 8.6 blur= 317 sigma_sent=-
+[DIAG] MANEUVER   fps=30 det=27 acc=27 gate= 0 out= 0 tilt= 2.8 blur= 554 sigma_sent=1.3cm
+[DIAG] MANEUVER   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 2.8 blur=1049 sigma_sent=1.0cm
+[DIAG] MANEUVER   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.0 blur= 843 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=30 det= 3 acc= 3 gate= 0 out= 0 tilt= 9.2 blur= 385 sigma_sent=-
+[DIAG] MANEUVER   fps=30 det=28 acc=28 gate= 0 out= 0 tilt= 0.6 blur= 688 sigma_sent=1.2cm
+[DIAG] MANEUVER   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 1.6 blur= 748 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 1.7 blur= 793 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=31 det= 4 acc= 4 gate= 0 out= 0 tilt= 7.7 blur= 333 sigma_sent=-
+[DIAG] MANEUVER   fps=30 det=28 acc=28 gate= 0 out= 0 tilt= 1.0 blur= 496 sigma_sent=1.3cm
+[DIAG] MANEUVER   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 2.0 blur= 865 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=25 det=25 acc=25 gate= 0 out= 0 tilt= 1.2 blur= 438 sigma_sent=1.4cm
+[DIAG] MANEUVER   fps=29 det= 0 acc= 0 gate= 0 out= 0 tilt= 9.5 blur= 412 sigma_sent=-
+[DIAG] MANEUVER   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 1.5 blur= 673 sigma_sent=1.2cm
+[DIAG] MANEUVER   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 1.0 blur= 874 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 1.0 blur= 507 sigma_sent=1.3cm
+[DIAG] MANEUVER   fps=30 det= 2 acc= 2 gate= 0 out= 0 tilt= 8.9 blur= 363 sigma_sent=-
+[DIAG] MANEUVER   fps=30 det=28 acc=28 gate= 0 out= 0 tilt= 1.5 blur= 569 sigma_sent=1.2cm
+[DIAG] MANEUVER   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 1.9 blur= 956 sigma_sent=1.0cm
+[DIAG] MANEUVER   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 2.3 blur= 333 sigma_sent=1.5cm
+[DIAG] MANEUVER   fps=30 det= 0 acc= 0 gate= 0 out= 0 tilt=10.8 blur= 431 sigma_sent=-
+[DIAG] MANEUVER   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 2.0 blur= 832 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.3 blur= 837 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=30 det=28 acc=28 gate= 0 out= 0 tilt= 4.7 blur= 326 sigma_sent=-
+[DIAG] MANEUVER   fps=31 det= 4 acc= 4 gate= 0 out= 0 tilt= 9.7 blur= 449 sigma_sent=1.5cm
+[DIAG] MANEUVER   fps=30 det=29 acc=29 gate= 0 out= 0 tilt= 0.1 blur= 585 sigma_sent=1.2cm
+[DIAG] MANEUVER   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 2.1 blur= 940 sigma_sent=1.0cm
+[DIAG] MANEUVER   fps=30 det=26 acc=26 gate= 0 out= 0 tilt= 8.4 blur= 290 sigma_sent=-
+[DIAG] MANEUVER   fps=30 det= 5 acc= 5 gate= 0 out= 0 tilt=10.3 blur= 855 sigma_sent=1.2cm
+[DIAG] MANEUVER   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 2.5 blur= 902 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.5 blur= 831 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=31 det=26 acc=26 gate= 0 out= 0 tilt= 9.7 blur= 304 sigma_sent=-
+[DIAG] MANEUVER   fps=30 det=11 acc=11 gate= 0 out= 0 tilt= 4.5 blur= 712 sigma_sent=1.2cm
+[DIAG] MANEUVER   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.6 blur= 800 sigma_sent=1.1cm
+[DIAG] MANEUVER   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.8 blur= 849 sigma_sent=1.1cm
+[FLT] -> CONVERGE
+[DIAG] CONVERGE   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.3 blur= 994 sigma_sent=1.0cm
+[DIAG] CONVERGE   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.4 blur= 806 sigma_sent=1.1cm
+[DIAG] CONVERGE   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.2 blur= 766 sigma_sent=1.1cm
+[DIAG] CONVERGE   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.1 blur= 933 sigma_sent=1.0cm
+[DIAG] CONVERGE   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.1 blur= 995 sigma_sent=1.0cm
+[DIAG] CONVERGE   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.4 blur= 859 sigma_sent=1.1cm
+[DIAG] CONVERGE   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.8 blur= 839 sigma_sent=1.1cm
+[DIAG] CONVERGE   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.4 blur= 815 sigma_sent=1.1cm
+[DIAG] CONVERGE   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.3 blur= 928 sigma_sent=1.0cm
+[DIAG] CONVERGE   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.7 blur= 896 sigma_sent=1.1cm
+[DIAG] CONVERGE   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 1.2 blur= 927 sigma_sent=1.0cm
+[DIAG] CONVERGE   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.2 blur= 945 sigma_sent=1.0cm
+[DIAG] CONVERGE   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.7 blur= 972 sigma_sent=1.0cm
+[DIAG] CONVERGE   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.4 blur= 941 sigma_sent=1.0cm
+[DIAG] CONVERGE   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.3 blur= 911 sigma_sent=1.1cm
+[FLT] -> DESCENT
+[DIAG] DESCENT    fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.5 blur= 927 sigma_sent=1.0cm
+[FLT] pad at EKF z -0.37 m (rangefinder, rangefinder on pad 0.17 m)
+[FLT] -> LANDING
+[LND] height 1.61 m | EKF off origin  3.4 cm | marker seen
+[DIAG] LANDING    fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.3 blur= 963 sigma_sent=1.0cm
+[LND] height 1.53 m | EKF off origin  3.7 cm | marker seen
+[DIAG] LANDING    fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.2 blur= 894 sigma_sent=1.1cm
+[LND] height 1.28 m | EKF off origin  2.1 cm | marker seen
+[DIAG] LANDING    fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.7 blur=1005 sigma_sent=1.0cm
+[LND] height 1.09 m | EKF off origin  0.7 cm | marker seen
+[DIAG] LANDING    fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.1 blur= 933 sigma_sent=1.0cm
+[LND] height 0.88 m | EKF off origin  2.3 cm | marker seen
+[DIAG] LANDING    fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.5 blur= 854 sigma_sent=1.1cm
+[LND] height 0.68 m | EKF off origin  4.5 cm | marker seen
+[DIAG] LANDING    fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.6 blur= 729 sigma_sent=1.1cm
+[LND] height 0.49 m | EKF off origin  7.6 cm | marker seen
+[DIAG] LANDING    fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.3 blur= 703 sigma_sent=1.2cm
+[LND] height 0.30 m | EKF off origin  3.8 cm | marker seen
+[DIAG] LANDING    fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.6 blur= 526 sigma_sent=1.3cm
+[LND] height 0.09 m | EKF off origin  3.7 cm | marker seen
+[DIAG] LANDING    fps=31 det=19 acc=19 gate= 0 out= 0 tilt= 0.8 blur= 392 sigma_sent=-
+[LND] last marker fix at 0.05 m: CG +3.4, -1.6 cm from the marker; blind for 0.6 s
+[FLT] -> TOUCHDOWN
+[FLT] TOUCHDOWN detected (GUIDED landing, rangefinder 0.17 m) -> disarming now
+[FLT] commanding finished — vision keeps feeding EKF3 until DISARM.
+[MAIN] DISARMED — stopping vision.
+
+============================================================
+GROUND TRUTH — measure on the pad grid, BEFORE moving the drone:
+  reference point = centroid of the landing-gear contact points
+  dx = offset along pad +X arrow, dy = along pad +Y arrow, in cm
+  (the sortie is ALREADY saved. Enter or Ctrl-C skips; add it later with
+   --add-touchdown <SORTIE_ID> <DX_CM> <DY_CM>)
+  dx_cm dy_cm > 13 5.5
+  note (optional) >
+
+============================================================
+  SORTIE SUMMARY - Arm B (VQA-EKF adaptive)   (20261117_171127)
+============================================================
+  1 Manipulation  sigma sent HOVER_BASE 1.0 cm [1.0-1.0]
+                  sigma sent MANEUVER   1.1 cm [1.0-1.4]
+                  (A: flat 20 cm | A': flat tuned | B: must vary with tilt/blur;
+                   confirm with VISP.PErr in the .bin)
+  2 Maneuver      tilt 2.1 deg [0.3-14.5]   max 19.5 deg   accepted 1025/1317 frames, tilt-gated 0
+  3 Pipeline      latency capture->send median 51.4 ms  (VISO_DELAY_MS should ~ this + camera/UART)
+  4 EKF at disarm  N=+0.046 E=-0.005 m  (self-reported - NOT ground truth)
+  5 TRUTH touchdown  dx=+13.0 dy=+5.5 radial=14.1 cm   <-- primary outcome
+  completed=True   logs: /home/ascend/vqa_pilot_E3:E3P_02/adaptive_20261117_171127
+  LEDGER  replaced 20261117_171127 [B] valid=1 (sigma check OK) - 1 sortie(s) of this arm in E3P
+          table any time:  python3 vqa_ekf_e3_V1.py --compare
+  NEXT: copy this flight's DataFlash .bin into the folder above.
+============================================================
+(vqa-env) ascend@ascend:~/folder$ python3 vqa_ekf_e3_V1.py --no-flow --experiment E3P --log-root ~/vqa_pilot_E3:E3P_03 --mode constant
+============================================================
+  VQA-EKF EXPERIMENT v7.3 — Arm A (constant 0.20 m)
+  sortie 20261117_171515   experiment E3P   camera RGB   OPTICAL FLOW OFF   logs: /home/ascend/vqa_pilot_E3:E3P_03/constant_20261117_171515
+============================================================
+[MAV] Connecting /dev/ttyAMA2 @ 921600 (MAVLink 2)...
+[MAV] Protocol: script MAVLink 2, flight controller MAVLink 2
+[MAV] Connected sys=1
+[PRE] Reading flight-controller parameters...
+      AHRS_EKF_TYPE      = 3.0
+      EK3_SRC1_POSXY     = 6.0
+      EK3_SRC1_VELXY     = 0.0
+      EK3_SRC1_POSZ      = 2.0
+      EK3_SRC1_VELZ      = 0.0
+      EK3_SRC1_YAW       = 6.0
+      EK3_SRC_OPTIONS    = 0.0
+      VISO_TYPE          = 1.0
+      VISO_SCALE         = 1.0
+      VISO_QUAL_MIN      = 0.0
+      VISO_POS_M_NSE     = 0.009999999776482582
+      VISO_YAW_M_NSE     = 0.10000000149011612
+      EK3_FLOW_USE       = 1.0
+      FLOW_TYPE          = 6.0
+      GUID_OPTIONS       = 4.0
+      VISO_DELAY_MS      = 55.0
+      VISO_POS_X         = 0.10999999940395355
+      VISO_POS_Y         = 0.0
+      VISO_POS_Z         = 0.05000000074505806
+      VISO_ORIENT        = 0.0
+      EK3_POS_I_GATE     = 500.0
+      WPNAV_ACCEL        = 400.0
+      WPNAV_SPEED        = 1000.0
+      ANGLE_MAX          = 3000.0
+      RNGFND1_MIN_CM     = 10.0
+      RNGFND1_GNDCLEAR   = 17.0
+[PRE] landing: EKF only, straight down at 0.20 m/s to the EKF origin (camera offset 0.110, 0.000 m used for logging only)
+[PRE] WARNING: local time 17:15 is outside the E3 window 10:00-15:30 (low sun -> marker glare -> detection gaps; with no optical flow a gap of 1.5 s lands the drone). Fly only inside the window.
+[CAM] Auto-exposure ON
+[CAM] RGB 640x480@30  fx=384.5 fy=384.0  FOV 79.5 x 64.0 deg  lens model inverse_brown_conrady [-0.0567, 0.0666, 0.0005, 0.0009, -0.0213]
+[PRE] VQA model: sigma_base 0.0226 m, p 5.25, q 0.69 (blur: full_clahe)
+[PRE] FOV nose=64.0 right=79.5 deg -> axis 'right', max safe step 0.52 m at 2.0 m / 20.0 deg tilt; using 0.47 m
+[PRE] Mission plan at 2.0 m: TAKEOFF (max) 8 s, SETTLE (max) 7 s, HOVER_BASE 30 s, MANEUVER (11 x 4 s) 44 s, CONVERGE 15 s, DESCENT (pad ref) 1 s, LANDING (EKF only, min) 10 s  -> about 115 s
+[VIS] Thread started.
+[FLT] -> WAIT_PILOT
+
+============================================================
+>>> PILOT: drone on the platform/pad, camera over the marker, nose along +X.
+>>>        Arm in STABILIZE and switch to GUIDED at ANY height (ground included):
+>>>        on the ground the script takes off by itself after 2 s.
+>>> Pilot keeps RC override at all times (mode switch = abort).
+============================================================
+
+>>> E3 (no optical flow): take-off only after the EKF reports ABSOLUTE position for 2 s (camera must see the marker on the pad).
+[EKF] absolute horizontal position: NOT READY (no EKF_STATUS_REPORT yet)
+[FC] EKF3 IMU0 is using external nav data
+[FC] EKF3 IMU0 initial pos NED = -0.0,-0.1,-0.2 (m)
+[EKF] absolute horizontal position: OK (flags 0x037f)
+[EKF] absolute horizontal position: OK (flags 0x037f)
+[EKF] absolute horizontal position: OK (flags 0x037f)
+[FLT] -> TAKEOFF
+[FLT] note: heading +91 deg from pad +X. Steps are rotated to stay on the drone's own axis, so this is safe; pad dx/dy stay in pad frame.
+[FLT] TAKE-OFF in 2 s — switch out of GUIDED to cancel
+[DIAG] TAKEOFF    fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 1.8 blur= 555 sigma_sent=20.0cm
+[DIAG] TAKEOFF    fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 1.8 blur= 553 sigma_sent=20.0cm
+[DIAG] TAKEOFF    fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 1.8 blur= 562 sigma_sent=20.0cm
+[DIAG] TAKEOFF    fps=30 det=29 acc=29 gate= 0 out= 0 tilt= 1.2 blur= 488 sigma_sent=20.0cm
+[FLT] airborne
+[DIAG] TAKEOFF    fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 1.0 blur= 523 sigma_sent=20.0cm
+[FLT] -> SETTLE
+[FLT] -> HOVER_BASE
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 1.2 blur= 965 sigma_sent=20.0cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.6 blur= 940 sigma_sent=20.0cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.5 blur= 952 sigma_sent=20.0cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.2 blur= 960 sigma_sent=20.0cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.3 blur=1037 sigma_sent=20.0cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.4 blur= 986 sigma_sent=20.0cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.2 blur=1030 sigma_sent=20.0cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.1 blur= 951 sigma_sent=20.0cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.3 blur= 913 sigma_sent=20.0cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.2 blur= 929 sigma_sent=20.0cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.5 blur=1006 sigma_sent=20.0cm
+[DIAG] HOVER_BASE fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.1 blur= 947 sigma_sent=20.0cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.3 blur= 869 sigma_sent=20.0cm
+[DIAG] HOVER_BASE fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.3 blur= 889 sigma_sent=20.0cm
+[DIAG] HOVER_BASE fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.2 blur= 906 sigma_sent=20.0cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.4 blur= 981 sigma_sent=20.0cm
+[DIAG] HOVER_BASE fps=29 det=29 acc=29 gate= 0 out= 0 tilt= 0.2 blur=1010 sigma_sent=20.0cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.4 blur= 931 sigma_sent=20.0cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.3 blur= 999 sigma_sent=20.0cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.1 blur= 936 sigma_sent=20.0cm
+[DIAG] HOVER_BASE fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.2 blur= 932 sigma_sent=20.0cm
+[DIAG] HOVER_BASE fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.1 blur= 962 sigma_sent=20.0cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.1 blur= 958 sigma_sent=20.0cm
+[DIAG] HOVER_BASE fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.5 blur=1048 sigma_sent=20.0cm
+[DIAG] HOVER_BASE fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.3 blur= 932 sigma_sent=20.0cm
+[DIAG] HOVER_BASE fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.9 blur=1004 sigma_sent=20.0cm
+[DIAG] HOVER_BASE fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.4 blur= 993 sigma_sent=20.0cm
+[DIAG] HOVER_BASE fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.2 blur= 960 sigma_sent=20.0cm
+[DIAG] HOVER_BASE fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.6 blur= 962 sigma_sent=20.0cm
+[DIAG] HOVER_BASE fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.4 blur= 979 sigma_sent=20.0cm
+[FLT] -> MANEUVER
+[DIAG] MANEUVER   fps=31 det=28 acc=28 gate= 0 out= 0 tilt=10.0 blur= 510 sigma_sent=20.0cm
+[DIAG] MANEUVER   fps=31 det=17 acc=17 gate= 0 out= 0 tilt= 2.7 blur= 732 sigma_sent=20.0cm
+[DIAG] MANEUVER   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.3 blur= 904 sigma_sent=20.0cm
+[DIAG] MANEUVER   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.7 blur= 832 sigma_sent=20.0cm
+[DIAG] MANEUVER   fps=31 det=19 acc=19 gate= 0 out= 0 tilt=16.7 blur= 301 sigma_sent=-
+[DIAG] MANEUVER   fps=30 det=11 acc=11 gate= 0 out= 0 tilt= 6.6 blur= 900 sigma_sent=20.0cm
+[DIAG] MANEUVER   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 1.1 blur= 843 sigma_sent=20.0cm
+[DIAG] MANEUVER   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 1.5 blur= 868 sigma_sent=20.0cm
+[DIAG] MANEUVER   fps=31 det=17 acc=17 gate= 0 out= 0 tilt=11.4 blur= 296 sigma_sent=-
+[DIAG] MANEUVER   fps=30 det=17 acc=17 gate= 0 out= 0 tilt= 4.4 blur= 584 sigma_sent=20.0cm
+[DIAG] MANEUVER   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 1.4 blur= 945 sigma_sent=20.0cm
+[DIAG] MANEUVER   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.5 blur= 937 sigma_sent=20.0cm
+[DIAG] MANEUVER   fps=31 det=15 acc=15 gate= 0 out= 0 tilt= 9.5 blur= 278 sigma_sent=-
+[DIAG] MANEUVER   fps=31 det=17 acc=17 gate= 0 out= 0 tilt= 2.7 blur= 664 sigma_sent=20.0cm
+[DIAG] MANEUVER   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 1.2 blur= 849 sigma_sent=20.0cm
+[DIAG] MANEUVER   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.3 blur= 988 sigma_sent=20.0cm
+[DIAG] MANEUVER   fps=31 det=12 acc=12 gate= 0 out= 0 tilt= 3.2 blur= 320 sigma_sent=-
+[DIAG] MANEUVER   fps=30 det=20 acc=20 gate= 0 out= 0 tilt= 2.2 blur= 581 sigma_sent=20.0cm
+[DIAG] MANEUVER   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 1.7 blur= 922 sigma_sent=20.0cm
+[DIAG] MANEUVER   fps=29 det=29 acc=29 gate= 0 out= 0 tilt= 0.8 blur= 884 sigma_sent=20.0cm
+[DIAG] MANEUVER   fps=31 det=10 acc=10 gate= 0 out= 0 tilt= 1.2 blur= 303 sigma_sent=-
+[DIAG] MANEUVER   fps=31 det=21 acc=21 gate= 0 out= 0 tilt= 2.5 blur= 812 sigma_sent=20.0cm
+[DIAG] MANEUVER   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.7 blur=1027 sigma_sent=20.0cm
+[DIAG] MANEUVER   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.2 blur=1111 sigma_sent=20.0cm
+[DIAG] MANEUVER   fps=31 det= 8 acc= 8 gate= 0 out= 0 tilt= 2.5 blur= 321 sigma_sent=-
+[DIAG] MANEUVER   fps=30 det=21 acc=21 gate= 0 out= 0 tilt= 1.5 blur= 603 sigma_sent=20.0cm
+[DIAG] MANEUVER   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 1.0 blur=1012 sigma_sent=20.0cm
+[DIAG] MANEUVER   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.7 blur= 956 sigma_sent=20.0cm
+[DIAG] MANEUVER   fps=30 det= 6 acc= 6 gate= 0 out= 0 tilt= 3.7 blur= 344 sigma_sent=-
+[DIAG] MANEUVER   fps=30 det=23 acc=23 gate= 0 out= 0 tilt= 2.3 blur= 822 sigma_sent=20.0cm
+[DIAG] MANEUVER   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.4 blur=1014 sigma_sent=20.0cm
+[DIAG] MANEUVER   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.6 blur=1077 sigma_sent=20.0cm
+[DIAG] MANEUVER   fps=31 det= 4 acc= 4 gate= 0 out= 0 tilt= 7.4 blur= 320 sigma_sent=-
+[DIAG] MANEUVER   fps=30 det=27 acc=27 gate= 0 out= 0 tilt= 0.8 blur= 677 sigma_sent=20.0cm
+[DIAG] MANEUVER   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 1.6 blur= 970 sigma_sent=20.0cm
+[DIAG] MANEUVER   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.3 blur= 900 sigma_sent=20.0cm
+[DIAG] MANEUVER   fps=31 det= 2 acc= 2 gate= 0 out= 0 tilt= 9.3 blur= 403 sigma_sent=-
+[DIAG] MANEUVER   fps=29 det=28 acc=28 gate= 0 out= 0 tilt= 0.3 blur= 988 sigma_sent=20.0cm
+[DIAG] MANEUVER   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.4 blur=1073 sigma_sent=20.0cm
+[DIAG] MANEUVER   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.2 blur= 861 sigma_sent=20.0cm
+[DIAG] MANEUVER   fps=31 det=12 acc=12 gate= 0 out= 0 tilt= 4.8 blur= 938 sigma_sent=20.0cm
+[DIAG] MANEUVER   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.7 blur= 904 sigma_sent=20.0cm
+[DIAG] MANEUVER   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 1.0 blur= 932 sigma_sent=20.0cm
+[FLT] -> CONVERGE
+[DIAG] CONVERGE   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.5 blur= 979 sigma_sent=20.0cm
+[DIAG] CONVERGE   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.2 blur= 811 sigma_sent=20.0cm
+[DIAG] CONVERGE   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.6 blur= 976 sigma_sent=20.0cm
+[DIAG] CONVERGE   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.6 blur= 923 sigma_sent=20.0cm
+[DIAG] CONVERGE   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.2 blur=1015 sigma_sent=20.0cm
+[DIAG] CONVERGE   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.2 blur= 887 sigma_sent=20.0cm
+[DIAG] CONVERGE   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.3 blur= 971 sigma_sent=20.0cm
+[DIAG] CONVERGE   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.6 blur= 986 sigma_sent=20.0cm
+[DIAG] CONVERGE   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.2 blur=1009 sigma_sent=20.0cm
+[DIAG] CONVERGE   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.4 blur= 828 sigma_sent=20.0cm
+[DIAG] CONVERGE   fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.3 blur= 842 sigma_sent=20.0cm
+[DIAG] CONVERGE   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.2 blur=1003 sigma_sent=20.0cm
+[DIAG] CONVERGE   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.2 blur=1016 sigma_sent=20.0cm
+[DIAG] CONVERGE   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.9 blur= 876 sigma_sent=20.0cm
+[DIAG] CONVERGE   fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.2 blur= 936 sigma_sent=20.0cm
+[FLT] -> DESCENT
+[DIAG] DESCENT    fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.1 blur= 997 sigma_sent=20.0cm
+[FLT] pad at EKF z -0.35 m (rangefinder, rangefinder on pad 0.17 m)
+[FLT] -> LANDING
+[LND] height 1.65 m | EKF off origin  0.9 cm | marker seen
+[DIAG] LANDING    fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.2 blur= 982 sigma_sent=20.0cm
+[LND] height 1.58 m | EKF off origin  0.7 cm | marker seen
+[DIAG] LANDING    fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.4 blur= 984 sigma_sent=20.0cm
+[LND] height 1.33 m | EKF off origin  1.4 cm | marker seen
+[DIAG] LANDING    fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 0.6 blur= 731 sigma_sent=20.0cm
+[LND] height 1.13 m | EKF off origin  2.0 cm | marker seen
+[DIAG] LANDING    fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.0 blur=1005 sigma_sent=20.0cm
+[LND] height 0.93 m | EKF off origin  3.0 cm | marker seen
+[DIAG] LANDING    fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 1.0 blur= 907 sigma_sent=20.0cm
+[LND] height 0.70 m | EKF off origin  2.7 cm | marker seen
+[DIAG] LANDING    fps=30 det=30 acc=30 gate= 0 out= 0 tilt= 0.4 blur= 721 sigma_sent=20.0cm
+[LND] height 0.51 m | EKF off origin  6.3 cm | marker seen
+[DIAG] LANDING    fps=31 det=31 acc=31 gate= 0 out= 0 tilt= 1.4 blur= 665 sigma_sent=20.0cm
+[LND] height 0.31 m | EKF off origin  5.0 cm | marker seen
+[DIAG] LANDING    fps=31 det=29 acc=29 gate= 0 out= 0 tilt= 0.3 blur= 514 sigma_sent=20.0cm
+[LND] height 0.12 m | EKF off origin  5.6 cm | marker seen
+[DIAG] LANDING    fps=31 det= 3 acc= 3 gate= 0 out= 0 tilt= 1.0 blur= 376 sigma_sent=-
+[LND] last marker fix at 0.16 m: CG -1.9, +4.9 cm from the marker; blind for 1.1 s
+[FLT] -> TOUCHDOWN
+[FLT] TOUCHDOWN detected (GUIDED landing, rangefinder 0.17 m) -> disarming now
+[FLT] commanding finished — vision keeps feeding EKF3 until DISARM.
+[MAIN] DISARMED — stopping vision.
+
+============================================================
+GROUND TRUTH — measure on the pad grid, BEFORE moving the drone:
+  reference point = centroid of the landing-gear contact points
+  dx = offset along pad +X arrow, dy = along pad +Y arrow, in cm
+  (the sortie is ALREADY saved. Enter or Ctrl-C skips; add it later with
+   --add-touchdown <SORTIE_ID> <DX_CM> <DY_CM>)
+  dx_cm dy_cm > 14 7
+  note (optional) >
+
+============================================================
+  SORTIE SUMMARY - Arm A (constant 0.20 m)   (20261117_171515)
+============================================================
+  1 Manipulation  sigma sent HOVER_BASE 20.0 cm [20.0-20.0]
+                  sigma sent MANEUVER   20.0 cm [20.0-20.0]
+                  (A: flat 20 cm | A': flat tuned | B: must vary with tilt/blur;
+                   confirm with VISP.PErr in the .bin)
+  2 Maneuver      tilt 1.3 deg [0.2-13.9]   max 18.9 deg   accepted 1014/1321 frames, tilt-gated 0
+  3 Pipeline      latency capture->send median 54.7 ms  (VISO_DELAY_MS should ~ this + camera/UART)
+  4 EKF at disarm  N=-0.068 E=+0.036 m  (self-reported - NOT ground truth)
+  5 TRUTH touchdown  dx=+14.0 dy=+7.0 radial=15.7 cm   <-- primary outcome
+  completed=True   logs: /home/ascend/vqa_pilot_E3:E3P_03/constant_20261117_171515
+  LEDGER  replaced 20261117_171515 [A] valid=1 (sigma check OK) - 1 sortie(s) of this arm in E3P
+          table any time:  python3 vqa_ekf_e3_V1.py --compare
+  NEXT: copy this flight's DataFlash .bin into the folder above.
+============================================================

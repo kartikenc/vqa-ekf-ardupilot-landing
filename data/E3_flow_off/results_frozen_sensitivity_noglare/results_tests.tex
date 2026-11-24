@@ -1,0 +1,25 @@
+% requires \usepackage{booktabs}
+\begin{table}[t]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{3pt}
+\caption{Arm B versus the constant-$\sigma$ arms: difference of medians, B $-$ comparator (cm), with 95\% bootstrap CI; negative favours B. $p$: two-sided Mann--Whitney.}
+\label{tab:tests}
+\setlength{\tabcolsep}{1.5pt}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+ & \multicolumn{2}{c}{B vs A} & \multicolumn{2}{c}{B vs A$'$} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+Outcome & $\Delta$ [95\% CI] & $p$ & $\Delta$ [95\% CI] & $p$ \\
+\midrule
+Error, camera pt.$^\dagger$ & $-1.4$ [$-5.2$, $+1.6$] & 0.71 & $-1.5$ [$-3.5$, $+2.0$] & 0.71 \\
+Error, controlled pt. & $-1.8$ [$-5.2$, $+0.4$] & 0.06 & $-0.5$ [$-4.7$, $+1.4$] & 0.13 \\
+Spread & $-2.1$ [$-3.6$, $-0.1$] & 0.00 & $-1.2$ [$-3.1$, $+0.7$] & 0.07 \\
+Centroid shift$^\ddagger$ & 1.3 & 0.53 & 1.2 & 0.49 \\
+EKF error, last fix & $-0.3$ [$-2.0$, $+1.4$] & 0.61 & $+0.2$ [$-2.3$, $+1.7$] & 0.68 \\
+Blind drift & $-1.0$ [$-2.6$, $+0.3$] & 0.15 & $-1.5$ [$-2.9$, $-0.2$] & 0.09 \\
+Overshoot & $-0.5$ [$-4.7$, $+1.8$] & 0.18 & $0.0$ [$-1.5$, $+2.3$] & 0.76 \\
+\bottomrule
+\multicolumn{5}{@{}p{0.97\columnwidth}@{}}{\scriptsize Touchdown outcomes (cm). Spread: distance to the arm's own centroid. $^\dagger$Pre-registered primary outcome, Holm-adjusted. $^\ddagger$Distance between 2-D touchdown centroids; permutation test.} \\
+\end{tabular}
+\end{table}
