@@ -1,7 +1,7 @@
 {
   "title": "VQA-EKF: quality-adaptive vision noise for marker-based landing in ArduPilot EKF3 — code, parameters and flight data",
   "upload_type": "software",
-  "description": "Flight software, analysis software, flight-controller parameters, campaign workbooks, companion-computer logs and frozen analysis outputs for a randomised 90-sortie flight study of quality-adaptive vision measurement noise in the unmodified ArduPilot EKF3 (E1: optical flow fused; E3: vision only). Supports the article 'Quality-Adaptive Vision Noise for Marker-Based UAV Landing in a Production Autopilot'.",
+  "description": "Flight software, analysis software, flight-controller parameters, campaign workbooks, companion-computer logs and frozen analysis outputs for a randomised 90-sortie flight study of quality-adaptive vision measurement noise in the unmodified ArduPilot EKF3 (E1: optical flow fused; E3: vision only). Supports the article 'VQA-EKF: quality-adaptive vision measurement noise for GNSS-denied UAV precision landing in a production autopilot'.",
   "creators": [
     {
       "name": "Cholachgudda, Kartik E.",
