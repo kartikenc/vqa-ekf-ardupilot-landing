@@ -3,8 +3,8 @@
 Code, parameters and flight data for the article
 
 > K. E. Cholachgudda, S. Patil, M. T. Megharaj, A. Kadam, K. M. Sudharshan, M. Lakshmipathaiah,
-> *Quality-Adaptive Vision Noise for Marker-Based UAV Landing in a Production Autopilot: A Randomised
-> 90-Sortie Flight Study With and Without Optical Flow* (submitted to *Autonomous Intelligent Systems*, 2026).
+> *VQA-EKF: quality-adaptive vision measurement noise for GNSS-denied UAV precision landing in a
+> production autopilot* (submitted to *Autonomous Intelligent Systems*, 2026).
 
 VQA-EKF gives every ArUco position fix its own measurement noise, computed from vehicle tilt θ and
 image sharpness L (variance of the Laplacian):
@@ -46,7 +46,7 @@ Holybro X500 V2 · Cube Orange+ with ArduCopter 4.6.3 (EKF3) · Raspberry Pi 5 �
 | `model_fit/fit_vqa_model_handheld.py` | Truth-free hand-held fit of σ_b, p, q |
 | `analysis/analyze_vqa_ekf_final.py` | Analyzer v1.1 (SHA-256 `92bdc6bb5a306b7d…`): log matching, all metrics, tests and figures |
 | `analysis/check_maneuver_frames.py` | Manoeuvre-frame check |
-| `analysis/paper/` | Scripts for the article's extra statistics (non-inferiority, power, E1 vs E3) and Figs. 2, 4, 6 |
+| `analysis/paper/` | `paper_stats.py` (non-inferiority, power, E1 vs E3), `make_figures_ais.py` (Figs. 2–11 of the article), `fig1_system.tex` (Fig. 1, TikZ) and their outputs in `out/` |
 | `params/` | Flight-controller parameters: E1 (first and last log of the campaign) and E3 |
 | `data/E1_flow_on/`, `data/E3_flow_off/` | Campaign workbooks (randomised schedule, status, touchdown truth), companion-computer logs, frozen analyzer outputs, diagnostics |
 | `data/dataflash_logs/` | Pointer to the ArduPilot DataFlash logs (.bin) archived in Zenodo |
@@ -70,7 +70,8 @@ python3 analysis/analyze_vqa_ekf_final.py analyze --logs vqa_paper_E3 --experime
         --bins E3_bins --workbook data/E3_flow_off/workbook/VQA_EKF_E3_Campaign_final.xlsx --out results_E3
 # 4. article statistics and figures from the frozen outputs (no logs needed)
 python3 analysis/paper/paper_stats.py   --e1 data/E1_flow_on/results_frozen --e3 data/E3_flow_off/results_frozen_primary_all45 --out analysis/paper/out
-python3 analysis/paper/paper_figures.py --e1 data/E1_flow_on/results_frozen --e3 data/E3_flow_off/results_frozen_primary_all45 --out analysis/paper/out
+# 5. article figures 2-11 (needs the analyzer's _bin_cache from step 3 and the unpacked companion logs of both campaigns)
+python3 analysis/paper/make_figures_ais.py --e1 results_E1 --e3 results_E3 --e1-logs vqa_paper_E1 --e3-logs vqa_paper_E3 --out figures
 ```
 
 E1 is analysed the same way with `--experiment E1` and the E1 workbook. Step 4 reproduces
