@@ -15,13 +15,13 @@
   lab/.style={font=\footnotesize,align=center}]
 \node[box] (cam) {RGB camera\\(RealSense D455)\\640$\times$480, 30 Hz};
 \node[box,below=11mm of cam] (marker) {ArUco marker\\16 cm, world\\origin};
-\node[hl,right=8mm of cam] (pi) {\textbf{Companion computer}\\\textbf{(Raspberry Pi 5)}\\[2pt]
+\node[hl,right=12mm of cam] (pi) {\textbf{Companion computer}\\\textbf{(Raspberry Pi 5)}\\[2pt]
   marker pose (IPPE)\\tilt $\theta$, sharpness $L$\\frame gates (all arms)\\$\sigma$: A 20 cm, A$'$ 1.14 cm,\\B $\sigma(\theta,L)$};
 \node[box,right=13mm of pi] (ekf) {\textbf{ArduPilot EKF3}\\(Cube Orange+)\\[2pt]external-nav position\\noise $\max(\sigma,\,1\,\mathrm{cm})$};
 \node[box,above=7mm of ekf] (sens) {IMU, ToF height;\\optical flow (E1 only)};
 \node[box,below=7mm of ekf] (ctl) {GUIDED control;\\EKF-only landing};
 \node[box,below=7mm of ctl] (log) {DataFlash log: $\sigma$ used\\(VISP.PErr), innovations};
-\node[box,left=17mm of log] (truth) {Touchdown truth:\\marker to camera centre};
+\node[box,left=27mm of log] (truth) {Touchdown truth:\\marker to camera centre};
 \draw[arr] (marker) -- node[lab,left]{image} (cam);
 \draw[arr] (cam) -- node[lab,above]{frames} (pi);
 \draw[arr] ($(pi.east)+(0,3mm)$) -- node[lab,above]{fix + $\sigma$} ($(ekf.west)+(0,3mm)$);

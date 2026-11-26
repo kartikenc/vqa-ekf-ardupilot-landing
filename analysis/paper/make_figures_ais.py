@@ -140,8 +140,9 @@ def fig2_sortie(per3, logs3, out):
     ax[3].set_ylabel(r'$\sigma$ (cm)'); ax[3].set_ylim(0.9, 1.95)
     ax[3].legend(loc='upper left', ncol=3, frameon=False, fontsize=7, bbox_to_anchor=(0.06, 1.04))
     ax[3].set_xlabel('Time since take-off (s)')
+    fig.align_ylabels(ax)
     for k, a_ in zip('abcd', ax):
-        letter(a_, k, x=-0.10, y=0.82)
+        letter(a_, k, x=-0.155, y=0.86)
     save(fig, out, 3)
     return sid
 
@@ -174,9 +175,15 @@ def fig3_model(per1, per3, logs1, logs3, out):
     hb = a2.hexbin(T, Lv, gridsize=(34, 22), extent=(0, 25, 300, 1200), bins='log', cmap='Greys', mincnt=1,
                    linewidths=0.1)
     tt, ll = np.meshgrid(np.linspace(0, 25, 200), np.linspace(300, 1200, 200))
-    cs = a2.contour(tt, ll, model_sigma_cm(tt, ll), levels=[1.0, 1.1, 1.25, 1.5, 2.0, 3.0],
+    cs = a2.contour(tt, ll, model_sigma_cm(tt, ll), levels=[1.0, 1.1, 1.25, 1.5, 2.0],
                     colors=COL['adaptive'], linewidths=0.9)
-    a2.clabel(cs, fmt=lambda v: f'{v:g} cm', fontsize=6.5, inline_spacing=2)
+    # contour labels placed where each contour leaves the plot, outside the frame-density cloud
+    for lev, (xt, yt, ha, va) in {1.0: (7.3, 1215, 'center', 'bottom'), 1.1: (13.1, 1215, 'center', 'bottom'),
+                                  1.25: (18.0, 1215, 'center', 'bottom'), 1.5: (23.3, 1215, 'center', 'bottom'),
+                                  2.0: (24.8, 360, 'right', 'center')}.items():
+        a2.text(xt, yt, f'{lev:g}' if lev != 2.0 else '2 cm', ha=ha, va=va, fontsize=6.5, color=COL['adaptive'],
+                clip_on=False)
+    a2.text(0.3, 1215, r'$\sigma$ (cm):', ha='left', va='bottom', fontsize=6.5, color=COL['adaptive'], clip_on=False)
     a2.set_xlabel('Vehicle tilt (deg)'); a2.set_ylabel('Image sharpness L')
     cb = fig.colorbar(hb, ax=a2, pad=0.02, fraction=0.06)
     cb.set_label('Frames (log)', fontsize=7); cb.ax.tick_params(labelsize=6.5)
@@ -210,7 +217,7 @@ def fig4_floor(per1, per3, out):
     ax.set_yticks([0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 50]); ax.set_yticklabels(['0.1', '0.2', '0.5', '1', '2', '5', '10', '20', '50'])
     ax.set_xticks(ticks); ax.set_xticklabels(labels)
     ax.set_ylabel(r'$\sigma$ used by EKF3 (cm)')
-    ax.legend(loc='center left', bbox_to_anchor=(0.0, 0.62), frameon=False)
+    fig.legend(loc='lower center', ncol=3, frameon=False, bbox_to_anchor=(0.5, -0.1))
     save(fig, out, 4)
 
 
@@ -313,14 +320,10 @@ def fig9_nis(nis1, nis3, per1, per3, out):
         for m in ARMS:
             x = np.sort(np.clip(nis[m], 1e-4, None))
             ax.step(x, np.arange(1, len(x) + 1) / len(x), where='post', color=COL[m], ls=LS[m], lw=1.2)
-            med = per.loc[per['mode'] == m, 'nis_mean'].median()
-            ax.plot([], [], ' ', label=f'{SHORT[m]}: {med:.3f}' if med < 0.01 else f'{SHORT[m]}: {med:.2f}')
         ax.axvline(5.991, color=INK2, lw=0.6, ls=':')
         ax.text(5.991 * 1.1, 0.05, r'$\chi^2_{2,0.95}$', fontsize=7, color=INK2)
         ax.set_xscale('log'); ax.set_xlim(1e-4, 30); ax.set_ylim(0, 1.02)
         ax.set_xlabel('Position NIS of each vision update')
-        leg = ax.legend(frameon=False, loc='lower left', bbox_to_anchor=(0.01, 0.31), title='median sortie-mean NIS',
-                        title_fontsize=6.5, fontsize=6.5, handlelength=0, handletextpad=0)
         letter(ax, k, x=-0.02 if k == 'b' else -0.16)
     axes[0].set_ylabel('Fraction of updates')
     h = [Line2D([], [], color=COL[m], ls=LS[m], label=LAB[m]) for m in ARMS] + \
@@ -372,8 +375,10 @@ def fig11_glare(per1, per3, out):
         if len(s38):
             tt = pd.to_datetime(s38.date_time, unit='s') + pd.Timedelta(hours=5.5)
             x = float(tt.dt.hour.iloc[0] + tt.dt.minute.iloc[0] / 60); y = float(s38.maneuver_accept_frac.iloc[0] * 100)
-            ax.annotate('only sortie with gated\nvision updates (' + AP + ')', xy=(x, y), xytext=(11.2, 78), fontsize=6.5,
-                        arrowprops=dict(arrowstyle='-', lw=0.6, color=INK2))
+            ax.scatter([x], [y], marker=MK['tuned'], s=16, color=COL['tuned'], edgecolors='white', linewidths=0.4, zorder=6)
+            ax.scatter([x], [y], marker='o', s=110, facecolors='none', edgecolors=INK, linewidths=0.8, zorder=7)
+            ax.annotate('only sortie with gated\nvision updates (' + AP + ')', xy=(x - 0.12, y - 0.4), xytext=(10.25, 71.5),
+                        fontsize=6.5, arrowprops=dict(arrowstyle='-', lw=0.6, color=INK2, shrinkB=0))
         ax.set_xlim(10, 18); ax.set_ylim(70, 104)
         ax.set_xticks(range(11, 19, 2)); ax.set_xticklabels([f'{h}:00' for h in range(11, 19, 2)])
         ax.set_xlabel('Local time of take-off')
