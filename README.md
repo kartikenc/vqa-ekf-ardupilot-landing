@@ -1,5 +1,7 @@
 # VQA-EKF: quality-adaptive vision noise for marker-based landing in ArduPilot EKF3
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24566528.svg)](https://doi.org/10.5281/zenodo.24566528)
+
 Code, parameters and flight data for the article
 
 > K. E. Cholachgudda, S. Patil, M. T. Megharaj, A. Kadam, K. M. Sudharshan, M. Lakshmipathaiah,
@@ -91,8 +93,8 @@ Fly only with a safety pilot holding a STABILIZE takeover switch.
 
 ## Citation and licences
 
-Please cite the article and the archived release (see `CITATION.cff`; DOI on the Zenodo badge).
+Please cite the article and the archived release, https://doi.org/10.5281/zenodo.24566528 (see `CITATION.cff`).
 Code: MIT licence (`LICENSE`). Data, workbooks and figures: CC BY 4.0 (`DATA_LICENSE.md`).
 
 Funding: REVA University seed funding, Ref. REVA/IRoC-U/2026/DAC-001.
-Contact: Kartik E. Cholachgudda, REVA University, Bengaluru — kartik.c@reva.edu.in
+Contact: Kartik E. Cholachgudda, REVA University, Bengaluru — kartikenc@gmail.com

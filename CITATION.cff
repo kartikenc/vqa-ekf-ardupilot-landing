@@ -5,6 +5,7 @@ type: software
 license: MIT
 repository-code: "https://github.com/kartikenc/vqa-ekf-ardupilot-landing"
 version: "1.0.0"
+doi: "10.5281/zenodo.24566528"
 date-released: "2026-11-24"
 keywords: [precision landing, fiducial markers, adaptive measurement noise, extended Kalman filter, GNSS-denied navigation, ArduPilot, UAV]
 authors:
@@ -12,16 +13,18 @@ authors:
     given-names: Kartik E.
     orcid: "https://orcid.org/0000-0002-9217-6884"
     affiliation: "REVA University, Bengaluru, India"
-    email: kartik.c@reva.edu.in
+    email: kartikenc@gmail.com
   - family-names: Patil
     given-names: Shanawaz
     orcid: "https://orcid.org/0000-0001-5334-9415"
     affiliation: "REVA University, Bengaluru, India"
   - family-names: Megharaj
     given-names: Manish T.
+    orcid: "https://orcid.org/0009-0001-9327-7513"
     affiliation: "REVA University, Bengaluru, India"
   - family-names: Kadam
     given-names: Atharv
+    orcid: "https://orcid.org/0009-0002-3563-8795"
     affiliation: "REVA University, Bengaluru, India"
   - family-names: Sudharshan
     given-names: K. M.

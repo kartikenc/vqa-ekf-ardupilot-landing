@@ -1,8 +1,7 @@
 # ArduPilot DataFlash logs
 
 The flight-controller logs (`.bin`, one per sortie, about 3-5 MB each) are too large for this
-repository and are archived with the Zenodo record of this release (see the DOI badge and
-`CITATION.cff`):
+repository and are archived in the Zenodo record https://doi.org/10.5281/zenodo.24566528:
 
 | File in Zenodo | Content |
 |---|---|
