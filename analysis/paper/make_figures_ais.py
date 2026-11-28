@@ -1,4 +1,5 @@
-"""Data figures of the article (Figs. 2-11; Fig. 1 is the TikZ system diagram), in the journal's figure style.
+"""Data figures of the article (Figs. 2-8 and 10-12; Fig. 1 is the TikZ system diagram and Fig. 9 is made by
+maneuver_analysis.py), in the journal's figure style.
 
 Reads only frozen outputs and the released logs:
   --e1 / --e3       frozen analyzer folders (per_sortie.csv, bin_match.csv, _bin_cache/ written by the analyzer)
@@ -312,7 +313,7 @@ def fig8_decomp(per1, per3, out):
     save(fig, out, 8)
 
 
-def fig9_nis(nis1, nis3, per1, per3, out):
+def fig10_nis(nis1, nis3, per1, per3, out):
     fig, axes = plt.subplots(1, 2, figsize=(TW, 2.35), sharey=True, gridspec_kw=dict(wspace=0.08))
     xs = np.logspace(-4, np.log10(30), 400)
     for ax, nis, per, k in ((axes[0], nis1, per1, 'a'), (axes[1], nis3, per3, 'b')):
@@ -329,10 +330,10 @@ def fig9_nis(nis1, nis3, per1, per3, out):
     h = [Line2D([], [], color=COL[m], ls=LS[m], label=LAB[m]) for m in ARMS] + \
         [Line2D([], [], color=INK, ls=(0, (1, 1)), label=r'$\chi^2_2$ (consistent filter)')]
     fig.legend(handles=h, loc='lower center', ncol=2, frameon=False, bbox_to_anchor=(0.5, -0.24), fontsize=7)
-    save(fig, out, 9)
+    save(fig, out, 10)
 
 
-def fig10_flow(per1, per3, out):
+def fig11_flow(per1, per3, out):
     fig, axes = plt.subplots(1, 3, figsize=(TW, 2.3), gridspec_kw=dict(wspace=0.38))
     rng = np.random.default_rng(1)
     for ax, (col, lab), k in zip(axes, (('td_radial_cm', 'Touchdown error (cm)'), ('blind_drift_cm', 'Blind-descent drift (cm)'),
@@ -357,10 +358,10 @@ def fig10_flow(per1, per3, out):
     h = [Patch(facecolor='white', edgecolor=INK, label='E1: optical flow fused (open box)'),
          Patch(facecolor='#9fb7a9', edgecolor=INK, label='E3: vision only (filled box)')]
     fig.legend(handles=h, loc='lower center', ncol=2, frameon=False, bbox_to_anchor=(0.5, -0.12))
-    save(fig, out, 10)
+    save(fig, out, 11)
 
 
-def fig11_glare(per1, per3, out):
+def fig12_glare(per1, per3, out):
     fig, axes = plt.subplots(1, 2, figsize=(TW, 2.3), sharey=True, gridspec_kw=dict(wspace=0.12))
     for ax, d, k in ((axes[0], per1, 'a'), (axes[1], per3, 'b')):
         t = pd.to_datetime(d.date_time, unit='s') + pd.Timedelta(hours=5.5)
@@ -386,7 +387,7 @@ def fig11_glare(per1, per3, out):
     axes[0].set_ylabel('Frames accepted in manoeuvre (%)')
     h = [Line2D([], [], ls='none', marker=MK[m], ms=4.5, color=COL[m], label=LAB[m]) for m in ARMS]
     fig.legend(handles=h, loc='lower center', ncol=3, frameon=False, bbox_to_anchor=(0.5, -0.17))
-    save(fig, out, 11)
+    save(fig, out, 12)
 
 
 def main():
@@ -407,9 +408,9 @@ def main():
     fig6_ecdf(per1, per3, a.out)
     fig7_scatter(per3, a.out)
     fig8_decomp(per1, per3, a.out)
-    fig9_nis(nis1, nis3, per1, per3, a.out)
-    fig10_flow(per1, per3, a.out)
-    fig11_glare(per1, per3, a.out)
+    fig10_nis(nis1, nis3, per1, per3, a.out)
+    fig11_flow(per1, per3, a.out)
+    fig12_glare(per1, per3, a.out)
     json.dump(info, open(os.path.join(a.out, 'figure_info.json'), 'w'), indent=1)
     print(json.dumps(info))
 

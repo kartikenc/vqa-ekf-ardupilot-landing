@@ -1,0 +1,24 @@
+{
+ "E1": {
+  "sorties": 45,
+  "touchdowns": 45,
+  "ekf_warnings_in_flight": 0,
+  "sorties_with_warning_after_disarm": 0,
+  "first_warning_after_disarm_s_min": null,
+  "lane_switches": 0,
+  "relpos_lost_samples": 0,
+  "tilt_gated_frames": 0,
+  "rangefinder_zero_readings": 0
+ },
+ "E3": {
+  "sorties": 45,
+  "touchdowns": 45,
+  "ekf_warnings_in_flight": 0,
+  "sorties_with_warning_after_disarm": 45,
+  "first_warning_after_disarm_s_min": 13.009888000000046,
+  "lane_switches": 0,
+  "relpos_lost_samples": 0,
+  "tilt_gated_frames": 0,
+  "rangefinder_zero_readings": 0
+ }
+}
